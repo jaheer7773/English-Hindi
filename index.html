@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Plus Hindi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 16px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>English Plus Hindi Voice Translator</h1>
+
+  <button onclick="startEnglishToHindi()">Speak in English</button>
+  <button onclick="startHindiToEnglish()">Speak in Hindi</button>
+
+  <div id="output"></div>
+
+  <script>
+    function speak(text, lang) {
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = lang;
+      window.speechSynthesis.speak(speech);
+    }
+
+    function translate(text, fromLang, toLang) {
+      let translatedText = `[Translated ${fromLang} → ${toLang}]: ${text}`;
+      document.getElementById("output").innerText = translatedText;
+      speak(translatedText, toLang);
+    }
+
+    function startEnglishToHindi() {
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.onresult = function (event) {
+        const text = event.results[0][0].transcript;
+        translate(text, "English", "hi-IN");
+      };
+      recognition.start();
+    }
+
+    function startHindiToEnglish() {
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "hi-IN";
+      recognition.onresult = function (event) {
+        const text = event.results[0][0].transcript;
+        translate(text, "Hindi", "en-US");
+      };
+      recognition.start();
+    }
+  </script>
+</body>
+</html>
